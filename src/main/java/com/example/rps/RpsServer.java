@@ -13,10 +13,8 @@ public class RpsServer {
     private static final Matchmaker matchmaker = new Matchmaker();
 
     public static void startServer() {
-        try {
-            ServerSocket serverSocket = new ServerSocket(PORT);
+        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println(STR."Server started on port \{PORT}");
-
             while (true) {
                 // Accept incoming connections
                 Socket clientSocket = serverSocket.accept();

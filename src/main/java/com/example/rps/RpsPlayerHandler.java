@@ -38,9 +38,8 @@ public class RpsPlayerHandler implements Runnable {
                         writer.println("Move is not allowed: " + playerMove + ". Enter only either 'Rock', 'Paper' or 'Scissors'.");
                     }
                 } while (!moveAccepted);
-                writer.println("Your move is accepted!");
+                writer.println("Your move is accepted! Waiting for the opponent's move...");
                 player.setWaitingForTheOpponentsMove();
-                writer.println("Waiting for the opponent's move...");
 
                 // Get the battle result
                 battleResult = lobby.getBattleResult(player);
