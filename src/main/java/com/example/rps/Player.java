@@ -1,6 +1,7 @@
 package com.example.rps;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +17,8 @@ public class Player {
 
     private final int playerId;
     private final Socket playerSocket;
+    @Setter
+    private String playerName;
 
     public Player(Socket playerSocket) {
         this.playerId = selectPlayerId();

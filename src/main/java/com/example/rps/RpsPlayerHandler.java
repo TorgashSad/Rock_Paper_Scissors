@@ -18,7 +18,10 @@ public class RpsPlayerHandler implements Runnable {
                 PrintWriter writer = player.getPrintWriter()
         ) {
             // Handle client communication here
-            writer.println("Welcome to Rock-Paper-Scissors game! Please wait for opponent.");
+            writer.println("Welcome to Rock-Paper-Scissors game! Please enter your name.");
+            String playerName = reader.readLine();
+            player.setPlayerName(playerName);
+            writer.println(STR."Your name is: \{playerName}. Looking for an opponent...");
             String inputLine;
             while ((inputLine = reader.readLine()) != null) {
                 // Echo back the input to the client
