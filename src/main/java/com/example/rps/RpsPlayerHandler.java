@@ -4,21 +4,18 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.Socket;
 
 @RequiredArgsConstructor
 public class RpsPlayerHandler implements Runnable {
 
-    private final Socket playerSocket;
     private final Player player;
 
     @Override
     public void run() {
         try (
-                BufferedReader reader = new BufferedReader(new InputStreamReader(playerSocket.getInputStream()));
-                PrintWriter writer = new PrintWriter(playerSocket.getOutputStream(), true)
+                BufferedReader reader = player.getBufferedReader();
+                PrintWriter writer = player.getPrintWriter()
         ) {
             // Handle client communication here
             writer.println("Welcome to Rock-Paper-Scissors game! Please wait for opponent.");
@@ -32,7 +29,7 @@ public class RpsPlayerHandler implements Runnable {
             System.err.println(STR."Error handling client connection: \{e.getMessage()}");
         } finally {
             try {
-                playerSocket.close();
+                player.closeSocket();
                 RpsServer.removeClientConnection(player.getPlayerId()); // Remove client connection from the map
             } catch (IOException e) {
                 System.err.println(STR."Error closing client socket: \{e.getMessage()}");

@@ -23,7 +23,7 @@ public class RpsServer {
 
                 Player newPlayer = new Player(clientSocket);
                 // Start a new thread to handle the client
-                Thread clientThread = new Thread(new RpsPlayerHandler(clientSocket, newPlayer));
+                Thread clientThread = new Thread(new RpsPlayerHandler(newPlayer));
                 clientThread.start();
 
                 // Store the client connection
