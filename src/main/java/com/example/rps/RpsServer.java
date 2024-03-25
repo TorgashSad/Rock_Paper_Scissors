@@ -10,6 +10,7 @@ public class RpsServer {
 
     private static final int PORT = 8888; // Choose a port number
     private static final Map<Integer, Player> playersPool = new ConcurrentHashMap<>();
+    private static final Matchmaker matchmaker = new Matchmaker();
 
     public static void startServer() {
         try {
@@ -23,7 +24,7 @@ public class RpsServer {
 
                 Player newPlayer = new Player(clientSocket);
                 // Start a new thread to handle the client
-                Thread clientThread = new Thread(new RpsPlayerHandler(newPlayer));
+                Thread clientThread = new Thread(new RpsPlayerHandler(matchmaker, newPlayer));
                 clientThread.start();
 
                 // Store the client connection

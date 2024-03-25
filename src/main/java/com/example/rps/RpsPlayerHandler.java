@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 @RequiredArgsConstructor
 public class RpsPlayerHandler implements Runnable {
 
+    private final Matchmaker matchmaker;
     private final Player player;
 
     @Override
@@ -23,6 +24,9 @@ public class RpsPlayerHandler implements Runnable {
             player.setPlayerName(playerName);
             writer.println(STR."Your name is: \{playerName}. Looking for an opponent...");
             String inputLine;
+            matchmaker.registerPlayer(player);
+            Lobby lobby = player.getLobbyWhenAssigned();
+            writer.println(STR."Your opponent is found! Name: \{lobby.getOpponent(player).getPlayerName()}. Let the battle start!");
             while ((inputLine = reader.readLine()) != null) {
                 // Echo back the input to the client
                 writer.println(STR."You said: \{inputLine}");
@@ -30,6 +34,8 @@ public class RpsPlayerHandler implements Runnable {
             // Add logic for game matching, handling player choices, etc.
         } catch (IOException e) {
             System.err.println(STR."Error handling client connection: \{e.getMessage()}");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         } finally {
             try {
                 player.closeSocket();
