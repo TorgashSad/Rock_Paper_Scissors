@@ -5,14 +5,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class RpsServer {
 
     private static final int PORT = 8888; // Choose a port number
-    private static final Map<Integer, ClientConnection> clientConnections = new ConcurrentHashMap<>();
-    private static final ConcurrentLinkedQueue<Integer> clientIdPool = new ConcurrentLinkedQueue<>();
-    private static int clientIdCounter = 0;
+    private static final Map<Integer, Player> playersPool = new ConcurrentHashMap<>();
 
     public static void startServer() {
         try {
@@ -24,34 +21,23 @@ public class RpsServer {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println(STR."New client connected: \{clientSocket.getInetAddress()}");
 
-                // Assign a clientId to the client
-                int clientId = getClientId();
+                Player newPlayer = new Player(clientSocket);
                 // Start a new thread to handle the client
-                Thread clientThread = new Thread(new RpsClientHandler(clientSocket, clientId));
+                Thread clientThread = new Thread(new RpsPlayerHandler(clientSocket, newPlayer));
                 clientThread.start();
 
                 // Store the client connection
-                clientConnections.put(clientId, new ClientConnection(clientSocket, clientThread));
+                playersPool.put(newPlayer.getPlayerId(), newPlayer);
             }
         } catch (IOException e) {
             System.err.println(STR."Error starting server: \{e.getMessage()}");
         }
     }
 
-    private static int getClientId() {
-        int clientId;
-        if (!clientIdPool.isEmpty()) {
-            clientId = clientIdPool.poll();
-        } else {
-            clientId = clientIdCounter++;
-        }
-        return clientId;
-    }
-
     // Method to remove a client connection when it's closed
-    public static void removeClientConnection(int clientId) {
-        clientConnections.remove(clientId);
-        clientIdPool.offer(clientId); // Return clientId to the pool for reuse
+    public static void removeClientConnection(int playerId) {
+        playersPool.remove(playerId);
+        Player.returnPlayerIdToThePool(playerId); // Return playerId to the pool for reuse
     }
 }
 

@@ -1,26 +1,24 @@
 package com.example.rps;
 
+import lombok.RequiredArgsConstructor;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class RpsClientHandler implements Runnable {
+@RequiredArgsConstructor
+public class RpsPlayerHandler implements Runnable {
 
-    private final Socket clientSocket;
-    private final int clientId;
-
-    public RpsClientHandler(Socket clientSocket, int clientId) {
-        this.clientSocket = clientSocket;
-        this.clientId = clientId;
-    }
+    private final Socket playerSocket;
+    private final Player player;
 
     @Override
     public void run() {
         try (
-                BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true)
+                BufferedReader reader = new BufferedReader(new InputStreamReader(playerSocket.getInputStream()));
+                PrintWriter writer = new PrintWriter(playerSocket.getOutputStream(), true)
         ) {
             // Handle client communication here
             writer.println("Welcome to Rock-Paper-Scissors game! Please wait for opponent.");
@@ -34,8 +32,8 @@ public class RpsClientHandler implements Runnable {
             System.err.println(STR."Error handling client connection: \{e.getMessage()}");
         } finally {
             try {
-                clientSocket.close();
-                RpsServer.removeClientConnection(clientId); // Remove client connection from the map
+                playerSocket.close();
+                RpsServer.removeClientConnection(player.getPlayerId()); // Remove client connection from the map
             } catch (IOException e) {
                 System.err.println(STR."Error closing client socket: \{e.getMessage()}");
             }
