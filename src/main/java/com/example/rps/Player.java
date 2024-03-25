@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
 
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -24,11 +25,12 @@ public class Player {
     @Setter
     private String playerName;
     private Lobby lobby;
-    private final CountDownLatch latch = new CountDownLatch(1);
+    private final CountDownLatch lobbyAssignedLatch = new CountDownLatch(1);
+    private final Semaphore waitingForTheOpponentSemaphore = new Semaphore(0);
 
     public void setLobby(Lobby lobby) {
         this.lobby = lobby;
-        latch.countDown();
+        lobbyAssignedLatch.countDown();
     }
 
     public Player(Socket playerSocket) {
@@ -59,11 +61,19 @@ public class Player {
     }
 
     public Lobby getLobbyWhenAssigned() throws InterruptedException {
-        latch.await();
+        lobbyAssignedLatch.await();
         return lobby;
     }
 
     public static void returnPlayerIdToThePool(int playerId) {
         playerIdPool.offer(playerId);
+    }
+
+    public void setWaitingForTheOpponentsMove() throws InterruptedException {
+        waitingForTheOpponentSemaphore.acquire();
+    }
+
+    public void release() {
+        waitingForTheOpponentSemaphore.release();
     }
 }
