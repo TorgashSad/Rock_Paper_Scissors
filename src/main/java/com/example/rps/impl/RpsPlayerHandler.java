@@ -1,4 +1,4 @@
-package com.example.rps;
+package com.example.rps.impl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,7 +35,7 @@ public class RpsPlayerHandler implements Runnable {
                     playerMove = reader.readLine();
                     moveAccepted = lobby.acceptAnswer(player, playerMove);
                     if (!moveAccepted) {
-                        writer.println("Move is not allowed: " + playerMove + ". Enter only either 'Rock', 'Paper' or 'Scissors'.");
+                        writer.println(STR."Move is not allowed: \{playerMove}. Enter only either 'Rock', 'Paper' or 'Scissors'.");
                     }
                 } while (!moveAccepted);
                 writer.println("Your move is accepted! Waiting for the opponent's move...");

@@ -1,5 +1,8 @@
 package com.example.rps;
 
+import com.example.rps.impl.Matchmaker;
+import com.example.rps.impl.Player;
+import com.example.rps.impl.RpsPlayerHandler;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

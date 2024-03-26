@@ -1,4 +1,4 @@
-package com.example.rps;
+package com.example.rps.impl;
 
 import java.util.Set;
 

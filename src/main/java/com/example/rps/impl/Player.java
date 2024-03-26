@@ -1,4 +1,4 @@
-package com.example.rps;
+package com.example.rps.impl;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
