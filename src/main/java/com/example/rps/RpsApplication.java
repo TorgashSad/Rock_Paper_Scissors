@@ -8,7 +8,6 @@ public class RpsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RpsApplication.class, args);
-		RpsServer.startServer();
 	}
 
 }

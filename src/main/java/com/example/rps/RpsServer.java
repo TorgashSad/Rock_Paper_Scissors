@@ -1,17 +1,23 @@
 package com.example.rps;
 
+import jakarta.annotation.PostConstruct;
+import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Service
 public class RpsServer {
 
     private static final int PORT = 8888; // Choose a port number
+    //TODO: I don't need it?
     private static final Map<Integer, Player> playersPool = new ConcurrentHashMap<>();
     private static final Matchmaker matchmaker = new Matchmaker();
 
+    @PostConstruct
     public static void startServer() {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println(STR."Server started on port \{PORT}");
