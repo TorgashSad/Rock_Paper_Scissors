@@ -17,7 +17,7 @@ import java.net.Socket;
 public class RpsServer {
 
     @Value("${spring.application.server.port}")
-    private int PORT; // Choose a port number
+    private int PORT;
     private final Matchmaker matchmaker;
 
     @PostConstruct

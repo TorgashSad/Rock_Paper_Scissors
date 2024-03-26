@@ -30,7 +30,6 @@ public class Matchmaker {
         Lobby lobby = new Lobby(player1, player2);
         player1.setLobby(lobby);
         player2.setLobby(lobby);
-        // Handle sending lobby information to players, start game, etc.
     }
 
 }

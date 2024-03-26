@@ -41,6 +41,10 @@ public class Lobby {
         return true;
     }
 
+    private boolean validateMove(String move) {
+        return ROCK_PAPER_SCISSORS.contains(move);
+    }
+
     private BattleResult resolveBattle() {
         if (firstPlayerMove.equals(secondPlayerMove)) {
             return BattleResult.DRAW;
@@ -56,10 +60,6 @@ public class Lobby {
                         throw new IllegalArgumentException(STR."Invalid moves: \{firstPlayerMove}, \{secondPlayerMove}");
             };
         }
-    }
-
-    private boolean validateMove(String move) {
-        return ROCK_PAPER_SCISSORS.contains(move);
     }
 
     public Boolean getBattleResult(Player player) {
@@ -85,7 +85,7 @@ public class Lobby {
         secondPlayerMove = null;
     }
 
-    public enum BattleResult {
+    private enum BattleResult {
         FIRST_PLAYER_WINS,
         SECOND_PLAYER_WINS,
         DRAW

@@ -18,13 +18,12 @@ public class RpsPlayerHandler implements Runnable {
                 BufferedReader reader = player.getBufferedReader();
                 PrintWriter writer = player.getPrintWriter()
         ) {
-            // Handle client communication here
             writer.println("Welcome to Rock-Paper-Scissors game! Please enter your name.");
-            String playerName = reader.readLine();
+            String playerName = reader.readLine(); //blocking
             player.setPlayerName(playerName);
             writer.println(STR."Your name is: \{playerName}. Looking for an opponent...");
             matchmaker.registerPlayer(player);
-            Lobby lobby = player.getLobbyWhenAssigned();
+            Lobby lobby = player.getLobbyWhenAssigned(); //blocking
             writer.println(STR."Your opponent is found! Name: \{lobby.getOpponent(player).getPlayerName()}. Let the battle start! Enter 'Rock', 'Paper' or 'Scissors'.");
             // Repeat the game until a decisive result is achieved
             Boolean battleResult;
@@ -32,20 +31,17 @@ public class RpsPlayerHandler implements Runnable {
                 String playerMove;
                 boolean moveAccepted;
                 do {
-                    playerMove = reader.readLine();
+                    playerMove = reader.readLine(); //blocking
                     moveAccepted = lobby.acceptAnswer(player, playerMove);
                     if (!moveAccepted) {
                         writer.println(STR."Move is not allowed: \{playerMove}. Enter only either 'Rock', 'Paper' or 'Scissors'.");
                     }
                 } while (!moveAccepted);
                 writer.println("Your move is accepted! Waiting for the opponent's move...");
-                player.setWaitingForTheOpponentsMove();
-
-                // Get the battle result
+                player.setWaitingForTheOpponentsMove(); //blocking
                 battleResult = lobby.getBattleResult(player);
                 if (battleResult == null) {
                     lobby.resetMoves();
-                    // Replay the game if the result is a draw
                     writer.println("The battle resulted in a draw. Let's replay!");
                     writer.println("Enter 'Rock', 'Paper' or 'Scissors' again.");
                 }
@@ -53,7 +49,7 @@ public class RpsPlayerHandler implements Runnable {
             if (battleResult) {
                 writer.println("YOU'VE WON THE BATTLE");
             } else {
-                writer.println("you've lost the battle :'(");
+                writer.println("You've lost the battle :'(");
             }
             disconnectPlayer();
         } catch (IOException e) {

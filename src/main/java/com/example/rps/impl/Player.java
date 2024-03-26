@@ -22,28 +22,16 @@ public class Player {
     @EqualsAndHashCode.Include
     private final int playerId;
     private final Socket playerSocket;
+    private final CountDownLatch lobbyAssignedLatch = new CountDownLatch(1);
+    private final Semaphore waitingForTheOpponentSemaphore = new Semaphore(0);
     @Setter
     private String playerName;
     private Lobby lobby;
-    private final CountDownLatch lobbyAssignedLatch = new CountDownLatch(1);
-    private final Semaphore waitingForTheOpponentSemaphore = new Semaphore(0);
 
-    public void setLobby(Lobby lobby) {
-        this.lobby = lobby;
-        lobbyAssignedLatch.countDown();
-    }
 
     public Player(Socket playerSocket) {
         this.playerId = selectPlayerId();
         this.playerSocket = playerSocket;
-    }
-
-    public BufferedReader getBufferedReader() throws IOException {
-        return new BufferedReader(new InputStreamReader(playerSocket.getInputStream()));
-    }
-
-    public PrintWriter getPrintWriter() throws IOException {
-        return new PrintWriter(playerSocket.getOutputStream(), true);
     }
 
     private static int selectPlayerId() {
@@ -54,6 +42,19 @@ public class Player {
             playerId = playerIdCounter++;
         }
         return playerId;
+    }
+
+    public void setLobby(Lobby lobby) {
+        this.lobby = lobby;
+        lobbyAssignedLatch.countDown();
+    }
+
+    public BufferedReader getBufferedReader() throws IOException {
+        return new BufferedReader(new InputStreamReader(playerSocket.getInputStream()));
+    }
+
+    public PrintWriter getPrintWriter() throws IOException {
+        return new PrintWriter(playerSocket.getOutputStream(), true);
     }
 
     public void closeSocket() throws IOException {
