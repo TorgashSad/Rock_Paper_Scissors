@@ -71,7 +71,7 @@ public class RpsPlayerHandler implements Runnable {
 
     private void disconnectPlayer() throws IOException {
         player.closeSocket();
-        RpsServer.removeClientConnection(player.getPlayerId()); // Remove client connection from the map
+        Player.returnPlayerIdToThePool(player.getPlayerId());
     }
 }
 

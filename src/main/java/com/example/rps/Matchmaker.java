@@ -1,8 +1,11 @@
 package com.example.rps;
 
+import org.springframework.stereotype.Component;
+
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+@Component
 public class Matchmaker {
 
     private final ConcurrentMap<Integer, Player> waitingPlayers = new ConcurrentHashMap<>();
