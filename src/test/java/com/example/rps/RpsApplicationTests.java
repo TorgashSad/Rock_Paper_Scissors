@@ -9,6 +9,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -21,8 +24,9 @@ class RpsApplicationTests {
 		telnetClient.disconnect();
 	}
 
+	//For some mysterious reason this test breaks when executed after any other :hmmm:
 	@Test
-	void lobbyFormed() throws IOException, InterruptedException {
+	void lobbyFormed() throws IOException {
 		MyTelnetClient telnetClient1 = connectToServer();
 		MyTelnetClient telnetClient2 = connectToServer();
 		String testName1 = "TestName1";
@@ -33,6 +37,24 @@ class RpsApplicationTests {
 		telnetClient1.disconnect();
 		telnetClient2.disconnect();
 	}
+
+	@Test
+	void nClientsConnected() throws IOException {
+		List<MyTelnetClient> clientList = new ArrayList<>();
+		int n = 100;
+		for (int i = 0; i < n; i++) {
+			clientList.add(connectToServer());
+		}
+		clientList.forEach(myTelnetClient -> {
+            try {
+                myTelnetClient.disconnect();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+	}
+
+
 
 	private void verifyLobbyCreated(MyTelnetClient telnetClient1, MyTelnetClient telnetClient2, String playerName1, String playerName2) throws IOException {
 		BufferedReader bufferedReader1 = telnetClient1.getReader();
@@ -52,7 +74,7 @@ class RpsApplicationTests {
 
 	private MyTelnetClient connectToServer() throws IOException {
 		TelnetClient telnetClient = new TelnetClient();
-		telnetClient.connect("192.168.1.8", 8888);
+		telnetClient.connect(InetAddress.getLocalHost(), 8888);
 		MyTelnetClient myTelnetClient = new MyTelnetClient(telnetClient);
 		assertTrue(myTelnetClient.isConnected());
 		BufferedReader bufferedReader = myTelnetClient.getReader();
