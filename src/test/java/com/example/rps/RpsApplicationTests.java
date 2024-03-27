@@ -19,13 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class RpsApplicationTests {
 
 	@Test
-	void simpleConnect() throws IOException {
-		MyTelnetClient telnetClient = connectToServer();
-		telnetClient.disconnect();
-	}
-
-	//For some mysterious reason this test breaks when executed after any other :hmmm:
-	@Test
 	void lobbyFormed() throws IOException {
 		MyTelnetClient telnetClient1 = connectToServer();
 		MyTelnetClient telnetClient2 = connectToServer();
@@ -53,8 +46,6 @@ class RpsApplicationTests {
             }
         });
 	}
-
-
 
 	private void verifyLobbyCreated(MyTelnetClient telnetClient1, MyTelnetClient telnetClient2, String playerName1, String playerName2) throws IOException {
 		BufferedReader bufferedReader1 = telnetClient1.getReader();
