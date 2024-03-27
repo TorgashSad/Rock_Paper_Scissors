@@ -34,7 +34,7 @@ class RpsApplicationTests {
 	@Test
 	void nClientsConnected() throws IOException {
 		List<MyTelnetClient> clientList = new ArrayList<>();
-		int n = 100;
+		int n = 500;
 		for (int i = 0; i < n; i++) {
 			clientList.add(connectToServer());
 		}
